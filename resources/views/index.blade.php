@@ -1,5 +1,4 @@
 @extends('partials.main')
-
 @section('container')
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
