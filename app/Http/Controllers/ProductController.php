@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 
 
@@ -33,6 +34,19 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        $validate = Validator::make($request->all(), [
+            'name' => 'required|string|unique:products,name',
+            'category_id' => 'required',
+            'product_code' => 'required|unique:products',
+            'unit' => 'required',
+            'price' => 'required',
+            'stock' => 'required',
+            'desc' => 'required',
+        ]);
+        if ($validate->fails()) {
+            return redirect()->back()->withErrors($validate->errors())->withInput();
+        }
+
         $products = Product::create([
             'name' => $request->name,
             'category_id' => $request->category_id,
@@ -68,6 +82,20 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $validate = Validator::make($request->all(), [
+            'name' => 'required|string',
+            'category_id' => 'required',
+            'product_code' => 'required|unique:products,product_code,' . $id . ',id',
+            'unit' => 'required',
+            'price' => 'required',
+            'stock' => 'required',
+            'desc' => 'required'
+        ]);
+
+        if ($validate->fails()) {
+            return redirect()->back()->withErrors($validate->errors())->withInput();
+        }
+
         $products = Product::where('id', $id)->update([
             'name' => $request->name,
             'category_id' => $request->category_id,
