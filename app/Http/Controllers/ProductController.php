@@ -117,4 +117,10 @@ class ProductController extends Controller
         $products->delete();
         return redirect('/product');
     }
+
+    public function chart()
+    {
+        $products = Product::all();
+        return view('product.chart');
+    }
 }
